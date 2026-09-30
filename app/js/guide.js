@@ -1,11 +1,11 @@
 // Title tour: captions belong to the interface, never to the mascot.
-const INTRO = { title: 'あそびかた', text: 'もんだいは 3つの\nえらびかたが あるよ' };
-const LEVEL = { target: '#start', title: 'じぶんレベル', text: 'いまの きみに あった もんだい。\nはじめは じつりょくチェック' };
-const GRADES = { target: '.grades', title: '1ねんせい〜6ねんせい', text: 'がくねんの もんだいを\nまとめて れんしゅう' };
-const TREE = { target: '#open-tree', title: 'スキルツリー', text: 'やりたい もんだいを\n1つ えらんで れんしゅう' };
-const TROPHY = { target: '#open-trophy', title: 'トロフィー', text: 'あそぶと もらえるよ。\nつづけて あそぶと ふえていく' };
-const COLLECTION = { target: '#open-collect', title: 'コレクション', text: 'トロフィーの ごほうびで ふえる\nはいけい・おんがく・きせかえなどを\nえらべるよ' };
-const LAST = { target: '#start', title: 'まよったら じぶんレベル！', text: 'この せつめいは\n？ で また みられるよ', recommend: true };
+const INTRO = { title: '玩法说明', text: '你可以用三种方式\n选择练习题' };
+const LEVEL = { target: '#start', title: '适合我的难度', text: '根据你的水平选择题目。\n先做一次能力测试' };
+const GRADES = { target: '.grades', title: '1年级〜6年级', text: '按年级选择题目，\n集中练习' };
+const TREE = { target: '#open-tree', title: '技能树', text: '选择一个想练习的技能，\n有针对性地练习' };
+const TROPHY = { target: '#open-trophy', title: '奖杯', text: '完成练习就能获得奖杯。\n坚持练习，收集更多奖杯' };
+const COLLECTION = { target: '#open-collect', title: '收藏', text: '获得奖杯，解锁更多奖励。\n可以自由选择背景、音乐\n和角色装扮' };
+const LAST = { target: '#start', title: '不知道选什么？试试适合我的难度！', text: '点击「？」按钮，\n随时查看玩法说明', recommend: true };
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
 // Use measured body + arm bounds. Hard constraints always outrank label coverage.
@@ -37,12 +37,12 @@ export function createGuide({ hero, reduced, onClose }) {
   overlay.innerHTML = `
     <svg class="guide-shade" aria-hidden="true"><defs><mask id="guide-mask" maskUnits="userSpaceOnUse"><rect class="guide-mask-base" fill="white" width="100%" height="100%"/><rect id="guide-hole" fill="black" rx="20"/><rect id="guide-help-hole" fill="black" rx="16"/></mask></defs><rect width="100%" height="100%" fill="#101637" fill-opacity=".76" mask="url(#guide-mask)"/><rect id="guide-ring" rx="20" fill="none" stroke="#ffd23f" stroke-width="3"/><rect id="guide-help-ring" rx="16" fill="none" stroke="#ffd23f" stroke-width="2"/></svg>
     <svg id="guide-actor" aria-hidden="true"><g id="guide-body"></g><g id="guide-arms"></g></svg>
-    <span id="guide-recommend" hidden>おすすめ</span>
-    <button type="button" id="guide-skip" class="sub-btn">とばす</button>
+    <span id="guide-recommend" hidden>推荐</span>
+    <button type="button" id="guide-skip" class="sub-btn">跳过</button>
     <section id="guide-card" aria-live="polite" aria-atomic="true">
       <h2 id="guide-heading"></h2><p id="guide-text"></p>
       <div id="guide-dots" role="img"></div>
-      <div class="guide-actions"><button type="button" class="sub-btn" id="guide-back">もどる</button><button type="button" class="big-btn" id="guide-next">つぎへ</button></div>
+      <div class="guide-actions"><button type="button" class="sub-btn" id="guide-back">返回</button><button type="button" class="big-btn" id="guide-next">下一步</button></div>
     </section>`;
   document.body.append(overlay);
   const $ = (s) => overlay.querySelector(s);
@@ -204,19 +204,19 @@ export function createGuide({ hero, reduced, onClose }) {
     $('#guide-text').textContent = page.text;
     overlay.classList.toggle('guide-last', !!page.recommend);
     if (page.recommend) {
-      $('#guide-text').replaceChildren(document.createTextNode('この せつめいは\n'));
+      $('#guide-text').replaceChildren(document.createTextNode('点击这个按钮，\n'));
       const icon = document.createElement('span');
       icon.id = 'guide-help-icon';
       icon.className = 'icon-btn guide-help-icon';
       icon.setAttribute('role', 'img');
-      icon.setAttribute('aria-label', 'あそびかた');
+      icon.setAttribute('aria-label', '玩法说明');
       icon.append(document.querySelector('#open-guide svg').cloneNode(true));
-      $('#guide-text').append(icon, document.createTextNode(' で また みられるよ'));
+      $('#guide-text').append(icon, document.createTextNode(' 可以再次查看玩法说明'));
     }
     $('#guide-dots').innerHTML = pages.map((_, i) => `<i${i === index ? ' class="current"' : ''} aria-hidden="true"></i>`).join('');
-    $('#guide-dots').setAttribute('aria-label', `${pages.length}つのうち ${index + 1}つめ`);
+    $('#guide-dots').setAttribute('aria-label', `第 ${index + 1} 步，共 ${pages.length} 步`);
     $('#guide-back').disabled = index === 0;
-    $('#guide-next').textContent = index === pages.length - 1 ? 'はじめる！' : 'つぎへ';
+    $('#guide-next').textContent = index === pages.length - 1 ? '开始吧！' : '下一步';
     layout(true);
     $('#guide-next').focus({ preventScroll: true });
   }
